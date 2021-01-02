@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: video-client-service
+spec:
+  type: ClusterIP
+  selector:
+    component: video-client
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-client-deployment
+spec:
+  replicas: 1
+  selector:
+    component: video-client
+  template:
+    metadata:
+      labels:
+        component: video-client
+    spec:
+      containers:
+        - name: client
+          image: gcr.io/learn-217205/video-client:latest
+          ports:
+            - containerPort: 3000
